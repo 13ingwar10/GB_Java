@@ -1,42 +1,37 @@
-package org.example;
+package org.example.GB_Java;
 
 import java.util.Scanner;
 
-/** 1) Вычислить сумма чисел от 1 до n
+/** 1) Дана строка sql-запроса "select * from students where ". Сформируйте часть WHERE этого запроса, используя StringBuilder.
+ * Данные для фильтрации приведены ниже в виде json-строки.
+ Если значение null, то параметр не должен попадать в запрос.
+ Параметры для фильтрации: {"name":"Ivanov", "country":"Russia", "city":"Moscow", "age":"null"}
  */
 
 public class FirstTask {
-    static int determineNumber() {
+        static String makeWhere() {
 
-        int number;
-        Scanner scanner = new Scanner(System.in);
+            String request = "{\"name\":\"Ivanov\", \"country\":\"Russia\", \"city\":\"Moscow\", \"age\":\"null\"}";
+            String where = "";
 
-        System.out.println("Enter number in range [-10:10]");
-        number = scanner.nextInt();
+            StringBuilder sb = new StringBuilder();
 
-        while (number > 10 || number < -10) {               // блок проверки ввода пользователя
-            System.out.println("Error! Enter number in range [-10:10]");
-            number = scanner.nextInt();
-        }
+            request = request.replaceAll("[^a-zA-Z]+", " ");        //удаление лишних символов из исходной строки
 
-        return number;
-    }
+            String[] requestArray = request.split(" ");                         //преобразование строки в массив
 
-    static int countSum(int number) {
-        int sum = 0;
+            for (int i = 1; i < requestArray.length; i = i+2) {                     //т.к. параметр и значение чередуются, i+2
 
-        if (number > 1) {
-            for (int i = 1; i <= number; i++) {
-                sum += i;
+                if (!requestArray[i+1].equals("null")) {
+
+                    if (i == 1) {
+                        sb.append(requestArray[i] + " = " + "'"+ requestArray[i+1]+ "'");
+                    } else {
+                        sb.append(" AND " + requestArray[i] + " = " + "'"+ requestArray[i+1]+ "'");
+                    }
+                }
             }
-        } else if (number < 1) {
-            for (int i = 1; i >= number; i--) {
-                sum += i;
-            }
-        } else if (number == 1) {
-            sum += 1;
+            where = "WHERE " + sb.toString();
+            return where;
         }
-
-        return sum;
-    }
 }

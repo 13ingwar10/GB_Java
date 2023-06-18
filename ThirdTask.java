@@ -1,72 +1,38 @@
-package org.example;
-
+package org.example.GB_Java;
 import java.util.Scanner;
 
-/** 3) Реализовать простой калькулятор
+/** 3) Дана json-строка (можно сохранить в файл и читать из файла)
+ [{"фамилия":"Иванов","оценка":"5","предмет":"Математика"},{"фамилия":"Петрова","оценка":"4","предмет":"Информатика"},{"фамилия":"Краснов","оценка":"5","предмет":"Физика"}]
+ Написать метод(ы), который распарсит json и, используя StringBuilder, создаст строки вида: Студент [фамилия] получил [оценка] по предмету [предмет].
+ Пример вывода:
+ Студент Иванов получил 5 по предмету Математика.
+ Студент Петрова получил 4 по предмету Информатика.
+ Студент Краснов получил 5 по предмету Физика.
  */
 
 public class ThirdTask {
 
-        static void calculator() {
-            System.out.println("Choose action:" + "\n" + "1. Addition" + "\n" + "2. Substraction" + "\n"
-                                + "3. Multiplication" + "\n" + "4. Division" + "\n");
+        static void rebuildJson() {
+            String json = "[{\"фамилия\":\"Иванов\",\"оценка\":\"5\",\"предмет\":\"Математика\"},{\"фамилия\":\"Петрова\"," +
+                    "\"оценка\":\"4\",\"предмет\":\"Информатика\"},{\"фамилия\":\"Краснов\",\"оценка\":\"5\",\"предмет\":\"Физика\"}]";
 
-            Scanner scanner = new Scanner(System.in);
-            int action = 0;
+            String[] jsonArray = json.split("},\\{");       //разбиваем исходник на 3 самостоятельных выражения через "},{"
 
-            action = scanner.nextInt();                     //тут хранится выбранное пользователем мат. действие;
-
-            while (action > 4 || action < 1) {
-                System.out.println("Error! Choose action [1:4]");
-                action = scanner.nextInt();
+            for (int i = 0; i < jsonArray.length; i++) {            // удаляем лишние символы из выражений
+                jsonArray[i] = jsonArray[i].replaceAll("[^а-яА-Я0-9]+", " ");
+                jsonArray[i] = jsonArray[i].trim();
             }
 
-            int a;
-            int b;
-            double result;
+            StringBuilder sb = new StringBuilder();
+            String output = "";
 
-            System.out.println("Enter number A:");
-            a = scanner.nextInt();
+            String[] substring = new String[6];                     //подстрока для разбивки выражений на слова
 
-            System.out.println("Enter number B:");
-            b = scanner.nextInt();
-
-            switch (action) {
-                case 1:
-                    result = a + b;
-                    System.out.println("A + B = " + result);
-                    break;
-                case 2:
-                    result = a - b;
-                    System.out.println("A - B = " + result);
-                    break;
-                case 3:
-                    result = a * b;
-                    System.out.println("A * B = " + result);
-                    break;
-                case 4:
-                    result = (double) a / b;
-                    System.out.println("A / B = " + result);
-                    break;
-            }
-
-            int nextStep = 0;
-            System.out.println("What to do next?" + "\n" + "1. Count more" + "\n" + "2. Exit" + "\n");
-
-            nextStep = scanner.nextInt();
-
-            while (nextStep > 2 || nextStep < 1) {
-                System.out.println("Error! Choose next step [1:2]");
-                nextStep = scanner.nextInt();
-            }
-
-            switch (nextStep) {
-                case 1:
-                    calculator();
-                    break;
-                case 2:
-                    System.out.println("Good day!");
-                    break;
+            for (int i = 0; i < jsonArray.length; i++) {
+                sb.setLength(0);
+                substring = jsonArray[i].split(" ");
+                sb.append("Студент " + substring[1] + " получил " + substring[3] + " по предмету " + substring[5]);
+                System.out.println(output = sb.toString());
             }
         }
 }

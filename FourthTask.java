@@ -1,60 +1,93 @@
-package org.example;
-
+package org.example.GB_Java;
+import java.io.IOException;
 import java.util.Scanner;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 /**
- * 4) (задание со *) Задано уравнение вида q + w = e, q, w, e >= 0. Некоторые цифры могут быть заменены знаком вопроса,
- * например, 2? + ?5 = 69. Требуется восстановить выражение до верного равенства. Предложить хотя бы одно решение или сообщить,
- * что его нет.
+ * 4) 4) К калькулятору из предыдущего ДЗ добавить логирование.
  */
 public class FourthTask {
 
-    static void findEquality() {
+    static void calculator() throws IOException {
+        String filename = "FourthTask Log.txt";           //создаем файл для записи логов
 
-        String userQ;               //то, что получаем от пользователя
-        String userW;
-        String userE;
+        StringBuilder logString = new StringBuilder();    //этот StringBuilder собирает строчку для записи в лог
 
-        String replacedQ;           //после замены ? на число
-        String replacedW;
-        String replacedE;
+        Logger logger = Logger.getLogger(SecondTask.class.getName());    //настраиваем логгер
 
-        int mathQ = 0;              //после конвертации в int
-        int mathW = 0;
-        int mathE = 0;
+        FileHandler fh = new FileHandler(filename,true);
+        logger.addHandler(fh);
+        SimpleFormatter sFormat = new SimpleFormatter();
+        fh.setFormatter(sFormat);
 
-        int counter = 0;            //счетчик успешных решений
+        System.out.println("Choose action:" + "\n" + "1. Addition" + "\n" + "2. Substraction" + "\n"
+                + "3. Multiplication" + "\n" + "4. Division" + "\n");
 
         Scanner scanner = new Scanner(System.in);
+        int action = 0;
 
-        System.out.println("Enter number Q");
-        userQ = scanner.next();
-        System.out.println("Enter number W");
-        userW = scanner.next();
-        System.out.println("Enter number E");
-        userE = scanner.next();
+        action = scanner.nextInt();                     //тут хранится выбранное пользователем мат. действие;
 
-        for (int i = 0; i < 10; i++) {                              //перебираем все числа от 0 до 9 заменяя ?
-            replacedQ = userQ.replace('?', (char) (48 + i)); //char 0 = int 48
-            replacedW = userW.replace('?', (char) (48 + i));
-            replacedE = userE.replace('?', (char) (48 + i));
-
-            mathQ = Integer.parseInt(replacedQ);
-            mathW = Integer.parseInt(replacedW);
-            mathE = Integer.parseInt(replacedE);
-
-            if (mathQ + mathW == mathE) {                           //проверяем равенство в каждом проходе цикла
-                System.out.println("Solution found: " + replacedQ + " + " + replacedW + " = " + replacedE);
-                counter++;
-            }
+        while (action > 4 || action < 1) {
+            System.out.println("Error! Choose action [1:4]");
+            action = scanner.nextInt();
         }
 
-        if (counter == 0) {
-            System.out.println("The expression has no solutions:");
-            System.out.println(userQ + " + " + userW + " = " + userE);
+        int a;
+        int b;
+        double result;
+
+        System.out.println("Enter number A:");
+        a = scanner.nextInt();
+
+        System.out.println("Enter number B:");
+        b = scanner.nextInt();
+
+        switch (action) {
+            case 1:
+                result = a + b;
+                logString.append(a + " + " + b + " = " + result);
+                System.out.println(logString.toString());
+                break;
+            case 2:
+                result = a - b;
+                logString.append(a + " - " + b + " = " + result);
+                System.out.println(logString.toString());
+                break;
+            case 3:
+                result = a * b;
+                logString.append(a + " * " + b + " = " + result);
+                System.out.println(logString.toString());
+                break;
+            case 4:
+                result = (double) a / b;
+                logString.append(a + " / " + b + " = " + result);
+                System.out.println(logString.toString());
+                break;
         }
 
+        logger.info(logString.toString());          //запись лога
+
+        int nextStep = 0;
+        System.out.println("What to do next?" + "\n" + "1. Count more" + "\n" + "2. Exit" + "\n");
+
+        nextStep = scanner.nextInt();
+
+        while (nextStep > 2 || nextStep < 1) {
+            System.out.println("Error! Choose next step [1:2]");
+            nextStep = scanner.nextInt();
+        }
+
+        switch (nextStep) {
+            case 1:
+                calculator();
+                break;
+            case 2:
+                System.out.println("Good day!");
+                break;
+        }
     }
-
 }
 

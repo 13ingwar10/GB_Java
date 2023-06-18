@@ -1,37 +1,58 @@
-package org.example;
+package org.example.GB_Java;
 
-/** 2) Вывести все простые числа от 1 до 1000
+import java.io.IOException;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
+/** 2) Реализуйте алгоритм сортировки пузырьком числового массива, результат после каждой итерации запишите в лог-файл.
  */
 
 public class SecondTask {
 
-    static void printPrimeNums() {
-        int[] primeNums = {2, 3, 5, 7};                //задаем массив простых чисел до 10, выводим сразу
-        for (int i = 0; i < primeNums.length; i++) {
-            System.out.print(primeNums[i] + " ");
-        }
+    static void bubbleSorting() throws IOException {
 
-        int counter = 0;                                //вспомогательный счетчик, если дошел до 4 - число простое
-        int lineBreak = 4;                              //вспомогательный счетчик для переноса строки при выводе
+        String filename = "Logger.txt";
 
-        for (int i = 8; i < 1001; i++) {                    //начиная с 8 проверяем все числа путем деления на ...
-            counter = 0;                                    //... каждый элемент массива primeNums
+        Logger logger = Logger.getLogger(SecondTask.class.getName());    //настраиваем логгер
 
-            for (int j = 0; j < primeNums.length; j++) {
-                if (i % primeNums[j] == 0) {
-                    break;
-                } else counter++;                           //если число не разделилось на элемент массива primeNums ...
-            }                                               //... прибавляем в counter 1
+        FileHandler fh = new FileHandler(filename,true);
+        logger.addHandler(fh);
+        SimpleFormatter sFormat = new SimpleFormatter();
+        fh.setFormatter(sFormat);
 
-            if (counter == 4) {
-                System.out.print(i + " ");
-                lineBreak++;
+        int[] array = {4, 3, 1 ,8 ,6, 4, 9, 3, 7, 5};
+
+        int max = 0;
+        int temp = 0;
+
+        for (int i = 0; i < array.length-1; i++) {
+            max = i;
+
+            for (int j = i + 1; j < array.length; j++) {
+                if (array[j] > array[max]) {
+                    max = j;
+                }
             }
 
-            if (lineBreak == 10) {                          //если LineBreak дошел до 10 - переносим строку
-                System.out.println("\n");
-                lineBreak = 0;
-            }
+            temp = array[i];
+            array[i] = array[max];
+            array[max] = temp;
+
+            logger.info(makeData(array));
         }
+    }
+
+    private static String makeData(int[] array) {       //формируем лог для записи в Logger.txt
+        String data = "";
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < array.length; i++) {
+            sb.append(array[i] + " ");
+        }
+
+        data = sb.toString();
+        return data;
     }
 }
