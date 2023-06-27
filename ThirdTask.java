@@ -1,38 +1,40 @@
 package org.example.GB_Java;
-import java.util.Scanner;
+import java.util.*;
 
-/** 3) Дана json-строка (можно сохранить в файл и читать из файла)
- [{"фамилия":"Иванов","оценка":"5","предмет":"Математика"},{"фамилия":"Петрова","оценка":"4","предмет":"Информатика"},{"фамилия":"Краснов","оценка":"5","предмет":"Физика"}]
- Написать метод(ы), который распарсит json и, используя StringBuilder, создаст строки вида: Студент [фамилия] получил [оценка] по предмету [предмет].
- Пример вывода:
- Студент Иванов получил 5 по предмету Математика.
- Студент Петрова получил 4 по предмету Информатика.
- Студент Краснов получил 5 по предмету Физика.
+/** 3) Задан целочисленный список ArrayList. Найти минимальное, максимальное и среднее из этого списка.
  */
 
 public class ThirdTask {
 
-        static void rebuildJson() {
-            String json = "[{\"фамилия\":\"Иванов\",\"оценка\":\"5\",\"предмет\":\"Математика\"},{\"фамилия\":\"Петрова\"," +
-                    "\"оценка\":\"4\",\"предмет\":\"Информатика\"},{\"фамилия\":\"Краснов\",\"оценка\":\"5\",\"предмет\":\"Физика\"}]";
+        static void findMaxMinAverage() {
+            Random rnd = new Random();
+            List array = new ArrayList();
 
-            String[] jsonArray = json.split("},\\{");       //разбиваем исходник на 3 самостоятельных выражения через "},{"
-
-            for (int i = 0; i < jsonArray.length; i++) {            // удаляем лишние символы из выражений
-                jsonArray[i] = jsonArray[i].replaceAll("[^а-яА-Я0-9]+", " ");
-                jsonArray[i] = jsonArray[i].trim();
+            for (int i = 0; i < 10; i++) {              //заполняем array list случайными числами
+                array.add(rnd.nextInt(20));
             }
 
-            StringBuilder sb = new StringBuilder();
-            String output = "";
+            System.out.println("Start array:");
+            System.out.println(Arrays.toString(array.toArray()));
 
-            String[] substring = new String[6];                     //подстрока для разбивки выражений на слова
+            int min = (int)array.get(0);
+            int max = (int)array.get(0);
+            int sum = 0;
+            double average = 0;
 
-            for (int i = 0; i < jsonArray.length; i++) {
-                sb.setLength(0);
-                substring = jsonArray[i].split(" ");
-                sb.append("Студент " + substring[1] + " получил " + substring[3] + " по предмету " + substring[5]);
-                System.out.println(output = sb.toString());
+            for (int i = 0; i < array.size();i++) {     //пробегаем по листу и находим min, max и sum для расчета average
+                if ((int)array.get(i) > max) {          //приводим к явному типу int т.к. не задали при формировании листа
+                    max = (int)array.get(i);
+                } else if ((int)array.get(i) < min) {
+                    min = (int)array.get(i);
+                }
+                sum = sum + (int)array.get(i);
             }
+
+            average = (double)sum/array.size();
+
+            System.out.println("Min value = " + min);   //формируем вывод
+            System.out.println("Max value = " + max);
+            System.out.println("Average value = " + average);
         }
 }

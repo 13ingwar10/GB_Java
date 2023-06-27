@@ -1,37 +1,87 @@
 package org.example.GB_Java;
 
+import org.w3c.dom.ls.LSOutput;
+
+import java.util.Random;
 import java.util.Scanner;
 
-/** 1) Дана строка sql-запроса "select * from students where ". Сформируйте часть WHERE этого запроса, используя StringBuilder.
- * Данные для фильтрации приведены ниже в виде json-строки.
- Если значение null, то параметр не должен попадать в запрос.
- Параметры для фильтрации: {"name":"Ivanov", "country":"Russia", "city":"Moscow", "age":"null"}
+/** 1) Реализовать алгоритм сортировки слиянием(метод взять из Интернета)
  */
 
 public class FirstTask {
-        static String makeWhere() {
+        static int[] createArray() {
+            Random rnd = new Random();
+            Scanner scanner = new Scanner(System.in);
 
-            String request = "{\"name\":\"Ivanov\", \"country\":\"Russia\", \"city\":\"Moscow\", \"age\":\"null\"}";
-            String where = "";
-
-            StringBuilder sb = new StringBuilder();
-
-            request = request.replaceAll("[^a-zA-Z]+", " ");        //удаление лишних символов из исходной строки
-
-            String[] requestArray = request.split(" ");                         //преобразование строки в массив
-
-            for (int i = 1; i < requestArray.length; i = i+2) {                     //т.к. параметр и значение чередуются, i+2
-
-                if (!requestArray[i+1].equals("null")) {
-
-                    if (i == 1) {
-                        sb.append(requestArray[i] + " = " + "'"+ requestArray[i+1]+ "'");
-                    } else {
-                        sb.append(" AND " + requestArray[i] + " = " + "'"+ requestArray[i+1]+ "'");
-                    }
-                }
+            System.out.println("Enter array size (not more than 10)");
+            int size = scanner.nextInt();
+            while (size < 1 || size > 10) {
+                System.out.println("Error! Number in range [1:10] expected");
             }
-            where = "WHERE " + sb.toString();
-            return where;
+
+            int[] array = new int[size];
+
+            for (int i = 0; i < array.length; i++) {
+                array[i] = rnd.nextInt(20);
+                System.out.print(array[i] + " ");
+            }
+            System.out.println("\n");
+
+            return array;
+        }
+
+        static int[] sortArray (int[] array) {
+
+            if (array.length < 2) {
+                return array;
+            }
+
+            int[] arrayLeft = new int[array.length / 2];
+
+            for (int i = 0; i < arrayLeft.length; i++) {
+                arrayLeft[i] = array[i];
+            }
+
+            int[] arrayRight = new int[array.length - arrayLeft.length];
+
+            for (int i = array.length/2; i < array.length; i++) {
+                arrayRight[i-array.length/2] = array[i];
+            }
+
+            arrayLeft = sortArray(arrayLeft);
+            arrayRight = sortArray(arrayRight);
+
+            return mergeArray(arrayLeft,arrayRight);
+        }
+
+        static int[] mergeArray(int[] arrayLeft, int[] arrayRight) {
+            int[] arrayResult = new int[arrayLeft.length + arrayRight.length];
+            int indexLeft = 0;
+            int indexRight = 0;
+
+            for (int i = 0; i < arrayResult.length; i++) {
+                if (indexLeft == arrayLeft.length) {                //проверка не закончился ли левый массив, если да -
+                    arrayResult[i] = arrayRight[i - indexLeft];    // - докидываем по порядку элементы в arrayResult
+                    indexRight++;
+                } else if(indexRight == arrayRight.length){         //проверка не закончился ли правый массив, если да -
+                    arrayResult[i] = arrayLeft[i - indexRight];      // - докидываем по порядку элементы в arrayResult
+                    indexLeft++;
+                } else if (arrayLeft[i - indexLeft] < arrayRight[i - indexRight]) {
+                    arrayResult[i] = arrayLeft[i - indexLeft];
+                    indexRight++;
+                } else {
+                    arrayResult[i] = arrayRight[i - indexRight];
+                    indexLeft++;
+                }
+
+            }
+            return arrayResult;
+        }
+
+        static void printArray(int[] array) {
+            for (int i = 0; i < array.length;i++) {
+                System.out.print(array[i] + " ");
+            }
+            System.out.println("\n");
         }
 }

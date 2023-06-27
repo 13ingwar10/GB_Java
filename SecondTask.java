@@ -1,58 +1,47 @@
 package org.example.GB_Java;
 
 import java.io.IOException;
+import java.util.*;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-/** 2) Реализуйте алгоритм сортировки пузырьком числового массива, результат после каждой итерации запишите в лог-файл.
+/** 2) Пусть дан произвольный список целых чисел, удалить из него четные числа
  */
 
 public class SecondTask {
 
-    static void bubbleSorting() throws IOException {
+    static int[] deleteEvenNums() {
 
-        String filename = "Logger.txt";
+        Random rnd = new Random();
+        Integer[] array = new Integer[10];
 
-        Logger logger = Logger.getLogger(SecondTask.class.getName());    //настраиваем логгер
-
-        FileHandler fh = new FileHandler(filename,true);
-        logger.addHandler(fh);
-        SimpleFormatter sFormat = new SimpleFormatter();
-        fh.setFormatter(sFormat);
-
-        int[] array = {4, 3, 1 ,8 ,6, 4, 9, 3, 7, 5};
-
-        int max = 0;
-        int temp = 0;
-
-        for (int i = 0; i < array.length-1; i++) {
-            max = i;
-
-            for (int j = i + 1; j < array.length; j++) {
-                if (array[j] > array[max]) {
-                    max = j;
-                }
-            }
-
-            temp = array[i];
-            array[i] = array[max];
-            array[max] = temp;
-
-            logger.info(makeData(array));
-        }
-    }
-
-    private static String makeData(int[] array) {       //формируем лог для записи в Logger.txt
-        String data = "";
-
-        StringBuilder sb = new StringBuilder();
-
+        System.out.println("Created array: ");                  //формирование случайного массива на 10 чисел
         for (int i = 0; i < array.length; i++) {
-            sb.append(array[i] + " ");
+            array[i] = rnd.nextInt(20);
+            System.out.print(array[i] + " ");
+        }
+        System.out.println("\n");
+
+        List subArray = new ArrayList(Arrays.asList(array));
+
+        Iterator<Integer> arrayIterator = subArray.iterator();
+
+        while (arrayIterator.hasNext()) {                       //прогон по итератору и удаление всех четных чисел
+            Integer number = arrayIterator.next();
+            if (number%2 == 0) {
+                arrayIterator.remove();
+            }
         }
 
-        data = sb.toString();
-        return data;
+        int[] result = new int[subArray.size()];                //сборка итогового массива
+        for (int i = 0; i < result.length; i++) {
+            result[i] = (int)subArray.get(i);
+        }
+
+        System.out.println("Array after deleting even numbers: ");
+        FirstTask.printArray(result);
+
+        return result;
     }
 }
