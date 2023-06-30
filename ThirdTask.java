@@ -1,40 +1,99 @@
 package org.example.GB_Java;
 import java.util.*;
 
-/** 3) Задан целочисленный список ArrayList. Найти минимальное, максимальное и среднее из этого списка.
+/** 4(со звездочкой) Реализовать стэк с помощью массива. Нужно реализовать методы: size(), empty(), push(), peek(), pop().
  */
 
 public class ThirdTask {
 
-        static void findMaxMinAverage() {
-            Random rnd = new Random();
-            List array = new ArrayList();
+    static void arrayAsStack() {
+        int[] array = createArray();
+        printArray(array);
 
-            for (int i = 0; i < 10; i++) {              //заполняем array list случайными числами
-                array.add(rnd.nextInt(20));
-            }
+        System.out.println("size() returns " + size(array));
+        System.out.println("empty() returns " + empty(array));
 
-            System.out.println("Start array:");
-            System.out.println(Arrays.toString(array.toArray()));
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter a number to push into array: ");
+        int number = scanner.nextInt();
 
-            int min = (int)array.get(0);
-            int max = (int)array.get(0);
-            int sum = 0;
-            double average = 0;
+        array = push(array,number);
+        System.out.println("After push(): ");
+        printArray(array);
 
-            for (int i = 0; i < array.size();i++) {     //пробегаем по листу и находим min, max и sum для расчета average
-                if ((int)array.get(i) > max) {          //приводим к явному типу int т.к. не задали при формировании листа
-                    max = (int)array.get(i);
-                } else if ((int)array.get(i) < min) {
-                    min = (int)array.get(i);
-                }
-                sum = sum + (int)array.get(i);
-            }
+        System.out.println("peek() returns " + peek(array));
 
-            average = (double)sum/array.size();
+        System.out.println("pop() returns " + pop(array));
+        System.out.println("After pop(): ");
+        array = popEditArray(array);
+        printArray(array);
+    }
 
-            System.out.println("Min value = " + min);   //формируем вывод
-            System.out.println("Max value = " + max);
-            System.out.println("Average value = " + average);
+    private static int[] createArray() {
+
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
+        System.out.println("Determine size of new array in range [0:10]");
+        int size = scanner.nextInt();
+
+        while (size > 10 || size < 0) {
+            System.out.println("Error! The size of a new array must be in range [0:10]");
+            size = scanner.nextInt();
         }
+
+        int[] array = new int[size];
+
+        for (int i = 0; i < array.length; i++) {
+            array[i] = random.nextInt(50);
+        }
+
+        return array;
+    }
+
+    private static void printArray(int[] array) {
+        for (int i = array.length; i > 0; i--) {
+            System.out.print(array[i-1] + " ");
+        }
+        System.out.println("\n");
+    }
+
+    private static int size(int[] array) {
+        return array.length;
+    }
+
+    private static boolean empty(int[] array) {
+        return array.length < 1;
+    }
+
+    private static int[] push(int[] array, int number) {
+        int[] newArray = new int[array.length + 1];
+
+        for (int i = 0; i < array.length; i++) {
+            newArray[i] = array[i];
+        }
+        newArray[newArray.length-1] = number;
+
+        return newArray;
+    }
+
+    private static int peek(int[] array) {
+        return array[array.length - 1];
+    }
+
+    private static int pop(int[] array) {
+
+        return array[array.length - 1];
+    }
+
+    private static int[] popEditArray(int[] array) {
+
+        int[] newArray = new int[array.length - 1];
+
+        for (int i = 0; i < newArray.length; i++) {
+            newArray[i] = array[i];
+        }
+
+        return newArray;
+    }
 }

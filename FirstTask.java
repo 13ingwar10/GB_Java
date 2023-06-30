@@ -2,86 +2,68 @@ package org.example.GB_Java;
 
 import org.w3c.dom.ls.LSOutput;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-/** 1) Реализовать алгоритм сортировки слиянием(метод взять из Интернета)
+/** 1) Пусть дан LinkedList с несколькими элементами. Реализуйте метод, который вернет “перевернутый” список.
  */
 
 public class FirstTask {
-        static int[] createArray() {
-            Random rnd = new Random();
-            Scanner scanner = new Scanner(System.in);
+    private static LinkedList<String> list = new LinkedList<>();
 
-            System.out.println("Enter array size (not more than 10)");
-            int size = scanner.nextInt();
-            while (size < 1 || size > 10) {
-                System.out.println("Error! Number in range [1:10] expected");
+    static void run() {
+
+        greeting();
+        boolean getIteration = true;
+
+        while (getIteration) {
+            String cmd = inputUser("Enter your command");
+            String[] cLine = cmd.toUpperCase().split("~");
+            switch (cLine[0]) {
+                case "EXIT":
+                    getIteration = false;
+                    break;
+                case "PRINT":
+                    System.out.println(list.get(Integer.parseInt(cLine[1])));
+                    break;
+                case "LIST":
+                    while (list.size() > 0) {
+                        System.out.println(list.pop());
+                    }
+                case"REVERSE":
+                    System.out.println(reverseList(list));
+                default:
+                    list.add(cLine[0]);
+                    break;
             }
-
-            int[] array = new int[size];
-
-            for (int i = 0; i < array.length; i++) {
-                array[i] = rnd.nextInt(20);
-                System.out.print(array[i] + " ");
-            }
-            System.out.println("\n");
-
-            return array;
         }
 
-        static int[] sortArray (int[] array) {
+    }
 
-            if (array.length < 2) {
-                return array;
-            }
+    private static String inputUser(String message) {
+        System.out.println(message + "->");
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
+    }
 
-            int[] arrayLeft = new int[array.length / 2];
-
-            for (int i = 0; i < arrayLeft.length; i++) {
-                arrayLeft[i] = array[i];
-            }
-
-            int[] arrayRight = new int[array.length - arrayLeft.length];
-
-            for (int i = array.length/2; i < array.length; i++) {
-                arrayRight[i-array.length/2] = array[i];
-            }
-
-            arrayLeft = sortArray(arrayLeft);
-            arrayRight = sortArray(arrayRight);
-
-            return mergeArray(arrayLeft,arrayRight);
+    private static List<String> reverseList(LinkedList<String> list) {
+        List<String> reversedList = new LinkedList<>();
+        for (int i = list.size(); i > 0; i--) {
+            reversedList.add(list.get(i-1));
         }
+        return reversedList;
+    }
 
-        static int[] mergeArray(int[] arrayLeft, int[] arrayRight) {
-            int[] arrayResult = new int[arrayLeft.length + arrayRight.length];
-            int indexLeft = 0;
-            int indexRight = 0;
-
-            for (int i = 0; i < arrayResult.length; i++) {
-                if (indexLeft == arrayLeft.length) {                //проверка не закончился ли левый массив, если да -
-                    arrayResult[i] = arrayRight[i - indexLeft];    // - докидываем по порядку элементы в arrayResult
-                    indexRight++;
-                } else if(indexRight == arrayRight.length){         //проверка не закончился ли правый массив, если да -
-                    arrayResult[i] = arrayLeft[i - indexRight];      // - докидываем по порядку элементы в arrayResult
-                    indexLeft++;
-                } else if (arrayLeft[i - indexLeft] < arrayRight[i - indexRight]) {
-                    arrayResult[i] = arrayLeft[i - indexLeft];
-                    indexRight++;
-                } else {
-                    arrayResult[i] = arrayRight[i - indexRight];
-                    indexLeft++;
-                }
-
-            }
-            return arrayResult;
-        }
-
-        static void printArray(int[] array) {
-            for (int i = 0; i < array.length;i++) {
-                System.out.print(array[i] + " ");
-            }
-            System.out.println("\n");
-        }
+    private static void greeting(){
+        System.out.println("Hi user! There are commands available to use:\n");
+        System.out.println("Enter any text to add this to List \n" +
+                "*print~number* is to print element *number* of List \n" +
+                "*list* is to print List from end to start \n" +
+                "*reverse* is to return reversed List \n" +
+                "*exit* is to exit program \n" +
+                "You should enter command without *");
+        System.out.println("\n");
+    }
 }

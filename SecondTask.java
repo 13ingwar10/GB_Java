@@ -6,42 +6,60 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-/** 2) Пусть дан произвольный список целых чисел, удалить из него четные числа
+/**
+ * 2) Реализуйте очередь с помощью LinkedList со следующими методами:enqueue() - помещает элемент в конец очереди,
+ * dequeue() - возвращает первый элемент из очереди и удаляет его, first() - возвращает первый элемент из очереди, не удаляя.
  */
 
 public class SecondTask {
 
-    static int[] deleteEvenNums() {
+    public static void makeList() {
+        List<String> list = new LinkedList<>();
 
         Random rnd = new Random();
-        Integer[] array = new Integer[10];
 
-        System.out.println("Created array: ");                  //формирование случайного массива на 10 чисел
-        for (int i = 0; i < array.length; i++) {
-            array[i] = rnd.nextInt(20);
-            System.out.print(array[i] + " ");
-        }
-        System.out.println("\n");
-
-        List subArray = new ArrayList(Arrays.asList(array));
-
-        Iterator<Integer> arrayIterator = subArray.iterator();
-
-        while (arrayIterator.hasNext()) {                       //прогон по итератору и удаление всех четных чисел
-            Integer number = arrayIterator.next();
-            if (number%2 == 0) {
-                arrayIterator.remove();
-            }
+        for (int i = 0; i < rnd.nextInt(10); i++) {
+            list.add(Integer.toString(rnd.nextInt(50)));
         }
 
-        int[] result = new int[subArray.size()];                //сборка итогового массива
-        for (int i = 0; i < result.length; i++) {
-            result[i] = (int)subArray.get(i);
-        }
+        System.out.println(list);
 
-        System.out.println("Array after deleting even numbers: ");
-        FirstTask.printArray(result);
+        Scanner scanner = new Scanner(System.in);
+        int number = 0;
+        System.out.println("Enter number of element to move to last: ");
+        number = scanner.nextInt();
 
-        return result;
+        enqueue((LinkedList<String>) list,number);
+        System.out.println("After enqueue(): \n" + list + "\n");
+
+        System.out.println("dequeue() returns  " + dequeue((LinkedList<String>) list));
+        System.out.println("After dequeue(): \n" + list + "\n");
+
+        first((LinkedList<String>) list);
+        System.out.println("After first(): \n" + list + "\n");
     }
+
+    private static LinkedList<String> enqueue(LinkedList<String> list, int number) {
+        Scanner scanner = new Scanner(System.in);
+
+        while (number > list.size() || number < 1) {
+            System.out.println("Error! Enter number of element not more than " + list.size() + " and > 0");
+            number = scanner.nextInt();
+        }
+
+        list.addLast(list.get(number-1).toString());
+        list.remove(number-1);
+        return list;
+    }
+
+    private static String dequeue(LinkedList<String> list) {
+
+        return list.pollFirst();
+    }
+
+    private static void first(LinkedList<String> list) {
+        System.out.println("First element = " + list.peekFirst());
+    }
+
+
 }
